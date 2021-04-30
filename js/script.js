@@ -37,4 +37,16 @@ window.addEventListener('DOMContentLoaded', () => {
             })
         };
     });
-})
+
+
+// modal
+
+const modal = document.querySelector('.modal');
+const btn = document.querySelector('.button');
+const dataModal = document.querySelectorAll('[data-modal]');
+
+dataModal.forEach(item) {item.addEventListener('click', () => {
+    modal.display = "block";
+})};
+
+});
