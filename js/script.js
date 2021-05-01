@@ -35,46 +35,60 @@ window.addEventListener('DOMContentLoaded', () => {
                     showTabContent(i);
                 }
             })
-        };
+        }; 
     });
 
+    // modal
 
-// modal
+    const modal = document.querySelector('.modal');
+    const dataClose = document.querySelector('[data-close]');
+    const dataModal = document.querySelectorAll('[data-modal]');
+    const modalContent = document.querySelector('.modal__content');
 
-const modal = document.querySelector('.modal');
-const dataClose = document.querySelector('[data-close]');
-const dataModal = document.querySelectorAll('[data-modal]');
-const modalContent = document.querySelector('.modal__content');
-
-
-dataModal.forEach(btn => {
-    btn.addEventListener('click', () => {
+    function openModal() {
         modal.classList.add('show');
         modal.classList.remove('hide');
         // modal.classList.toggle('show'); //* этот метод такжк уместен
         document.body.style.overflow = 'hidden'; //* при открытии модального страница не будет скролиться (overflow = hidden)
-    });
-    })
+        clearInterval(modalTimerId);//* прерываем запуск модального окна
+    }
 
-function closeModal () {
-    modal.classList.add('hide');
+    dataModal.forEach(btn => {
+            btn.addEventListener('click', openModal);
+        })
+
+    function closeModal() {
+        modal.classList.add('hide');
         modal.classList.remove('show');
         document.body.style.overflow = ''; //* оставляя пустую строку в значении , браузер сам решит что нада поставить по дефолту
-        
     };
 
     dataClose.addEventListener('click', closeModal); //* передаем ф-ию , а не вызываем!
 
-    modal.addEventListener('click', (e) => {  //* (е) указываем объект события и спульзуем в сравнениии его конечную цель e.target
+    modal.addEventListener('click', (e) => {  //* (е) указываем объект события и испульзуем в сравнениии его конечную цель e.target
         if (e.target === modal) {    //* сравнение с классом который у нас задан в переменных
             closeModal();
         }
     })
 
-document.addEventListener('keydown', (e) => {    //* назначаем событие для нажатие клавиши('keydown), поэтому обращаемся ко всему документу
-    if(e.code === "Escape" && modal.classList.contains('show'))  {    //*  у каждой клавиши есть свой code
-        closeModal();
-    }
-})   
+    document.addEventListener('keydown', (e) => {    //* назначаем событие для нажатие клавиши('keydown), поэтому обращаемся ко всему документу
+        if (e.code === "Escape" && modal.classList.contains('show')) {    //*  у каждой клавиши есть свой code
+            closeModal();
+        }
+    })
+//  const modalTimerId = setTimeout(openModal, 5000); //*запускаем модальное окно с интервалом в 5 сек(есть НО см. ф-ю)
 
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.   documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+ window.addEventListener('scroll', showModalByScroll);
+ 
+ //*window.pageYOffset - расстояние в px которое пользователь пролистал по  оси Y
+ //*document.documentElement.clientWidth -  видимая в экране пользователя часть страницы
+ //*document.documentElement.scrollHeight - высота всего конотента на страницы
+ 
 });
