@@ -44,6 +44,8 @@ window.addEventListener('DOMContentLoaded', () => {
 const modal = document.querySelector('.modal');
 const dataClose = document.querySelector('[data-close]');
 const dataModal = document.querySelectorAll('[data-modal]');
+const modalContent = document.querySelector('.modal__content');
+
 
 dataModal.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -51,14 +53,28 @@ dataModal.forEach(btn => {
         modal.classList.remove('hide');
         // modal.classList.toggle('show'); //* этот метод такжк уместен
         document.body.style.overflow = 'hidden'; //* при открытии модального страница не будет скролиться (overflow = hidden)
+    });
     })
 
-    dataClose.addEventListener('click', () => {
-        modal.classList.add('hide');
+function closeModal () {
+    modal.classList.add('hide');
         modal.classList.remove('show');
         document.body.style.overflow = ''; //* оставляя пустую строку в значении , браузер сам решит что нада поставить по дефолту
         
+    };
+
+    dataClose.addEventListener('click', closeModal); //* передаем ф-ию , а не вызываем!
+
+    modal.addEventListener('click', (e) => {  //* (е) указываем объект события и спульзуем в сравнениии его конечную цель e.target
+        if (e.target === modal) {    //* сравнение с классом который у нас задан в переменных
+            closeModal();
+        }
     })
-})
+
+document.addEventListener('keydown', (e) => {    //* назначаем событие для нажатие клавиши('keydown), поэтому обращаемся ко всему документу
+    if(e.code === "Escape" && modal.classList.contains('show'))  {    //*  у каждой клавиши есть свой code
+        closeModal();
+    }
+})   
 
 });
