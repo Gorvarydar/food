@@ -42,11 +42,23 @@ window.addEventListener('DOMContentLoaded', () => {
 // modal
 
 const modal = document.querySelector('.modal');
-const btn = document.querySelector('.button');
+const dataClose = document.querySelector('[data-close]');
 const dataModal = document.querySelectorAll('[data-modal]');
 
-dataModal.forEach(item) {item.addEventListener('click', () => {
-    modal.display = "block";
-})};
+dataModal.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        // modal.classList.toggle('show'); //* этот метод такжк уместен
+        document.body.style.overflow = 'hidden'; //* при открытии модального страница не будет скролиться (overflow = hidden)
+    })
+
+    dataClose.addEventListener('click', () => {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = ''; //* оставляя пустую строку в значении , браузер сам решит что нада поставить по дефолту
+        
+    })
+})
 
 });
