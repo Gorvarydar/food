@@ -1,4 +1,4 @@
-
+'use strict'
 window.addEventListener('DOMContentLoaded', () => {
     //Tabs
     const tabs = document.querySelectorAll('.tabheader__item'),
@@ -76,13 +76,15 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     })
-//  const modalTimerId = setTimeout(openModal, 5000); //*запускаем модальное окно с интервалом в 5 сек(есть НО см. ф-ю)
+ const modalTimerId = setTimeout(openModal, 5000); //*запускаем модальное окно с интервалом в 5 сек(есть НО см. ф-ю)
 
     function showModalByScroll() {
-        if (window.pageYOffset + document.documentElement.clientHeight >= document.   documentElement.scrollHeight) {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
             openModal();
+           
             window.removeEventListener('scroll', showModalByScroll);
         }
+        
     }
 
  window.addEventListener('scroll', showModalByScroll);
@@ -92,3 +94,52 @@ window.addEventListener('DOMContentLoaded', () => {
  //*document.documentElement.scrollHeight - высота всего конотента на страницы
  
 });
+
+//*используем калассы для создания карточек
+
+class MenuCards {
+    constructor (src, alt, title, decscr, price, parentSelector) {
+        this.src = src;
+        this.alt = alt;
+        this.title = title;
+        this.decscr = decscr; 
+        this.price = price; 
+        this.parent = document.querySelector(parentSelector) ; 
+        this.transfer = 27; 
+        this.chiangeToUAH(); //* метод можно вызвать в области переменных и он выполнится (и изменит нашу переменную)
+    }
+    chiangeToUAH() {
+        this.price = this.price * this.transfer
+    }
+
+    render() {
+        const element = document.createElement('div');
+        element.innerHTML = `
+        <div class="menu__item">
+                    <img src= ${this.src} alt=${this.alt}>
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">${this.decscr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                    </div>
+                </div>
+        `;
+        this.parent.append(element);
+    }
+}
+
+    // const div = new MenuCards(); //* правильный выриант но
+    // div.render();
+
+    //* но если этот объект исп-ся на месте,единожды( не передается никуда) и на него нет ссылок, то
+
+    new MenuCards(
+        "img/tabs/vegy.jpg",
+        "vegy",
+        'Меню "Фитнес"',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        9,
+        '.menu .container'
+    ).render()
